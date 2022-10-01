@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group 'suzzshin'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
+
+def grpcVersion = '1.49.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtimeOnly 'io.grpc:grpc-netty-shaded:${grpcVersion}'
+    implementation 'io.grpc:grpc-protobuf:${grpcVersion}'
+    implementation 'io.grpc:grpc-stub:${grpcVersion}'
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.17.3'
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
