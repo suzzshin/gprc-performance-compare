@@ -1,17 +1,6 @@
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.19"
-  }
-}
-
 plugins {
     id 'java'
-    id 'com.google.protobuf' version '0.8.19'
+    id 'com.google.protobuf' version '0.8.18'
 }
 
 group 'suzzshin'
@@ -21,37 +10,58 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'com.google.protobuf'
 
-def grpcVersion = '1.49.1'
+def grpcVersion = '1.49.0'
+def protobufVersion = '3.21.1'
+def protocVersion = protobufVersion
 
 repositories {
+    maven { // The google mirror is less flaky than mavenCentral()
+        url "https://maven-central.storage-download.googleapis.com/maven2/"
+
+        //url "https://repo1.maven.org/maven2/"
+    }
     mavenCentral()
+    //mavenLocal()
 }
 
 dependencies {
-    //runtimeOnly 'io.grpc:grpc-netty-shaded:${grpcVersion}'
-    //implementation 'io.grpc:grpc-protobuf:${grpcVersion}'
-    //implementation 'io.grpc:grpc-stub:${grpcVersion}'
-    //compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
+idea {
+    module {
+        //generatedSourceDirs.add(file("src/main/java/grpc"))
+        //sourceDirs.add(file("src/main/java/grpc"))
+    }
+}
+
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.17.3'
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
     }
     plugins {
         grpc {
             artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
     }
+
+    generatedFilesBaseDir = "$projectDir/src/"
+
     generateProtoTasks {
-        all().each { task ->
-            task.plugins {
-                grpc {}
-            }
+        all()*.plugins {
+            grpc {}
         }
+//        ofSourceSet("main").forEach {
+//            it.doFirst {
+//                delete("$generatedFilesBaseDir/main/java/example/grpc")
+//            }
+//        }
     }
 }
 
