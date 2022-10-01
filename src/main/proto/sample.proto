@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "example";
+
+package example;
+
+service SendService {
+    rpc Send (SampleRequest) returns (SampleResponse) {}
+}
+
+message SampleRequest {
+    int32 id = 1;
+}
+
+message SampleResponse {
+    int32 message = 1;
+}

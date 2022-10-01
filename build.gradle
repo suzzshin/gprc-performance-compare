@@ -1,5 +1,17 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.19"
+  }
+}
+
 plugins {
     id 'java'
+    id 'com.google.protobuf' version '0.8.19'
 }
 
 group 'suzzshin'
@@ -16,10 +28,10 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly 'io.grpc:grpc-netty-shaded:${grpcVersion}'
-    implementation 'io.grpc:grpc-protobuf:${grpcVersion}'
-    implementation 'io.grpc:grpc-stub:${grpcVersion}'
-    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    //runtimeOnly 'io.grpc:grpc-netty-shaded:${grpcVersion}'
+    //implementation 'io.grpc:grpc-protobuf:${grpcVersion}'
+    //implementation 'io.grpc:grpc-stub:${grpcVersion}'
+    //compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
@@ -39,6 +51,25 @@ protobuf {
             task.plugins {
                 grpc {}
             }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+        }
+        proto {
+            srcDirs 'src/main/proto'
+        }
+    }
+    test {
+        java {
+            srcDirs 'src/test/java'
+        }
+        proto {
+            srcDirs 'src/test/proto'
         }
     }
 }
