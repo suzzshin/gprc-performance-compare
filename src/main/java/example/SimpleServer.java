@@ -5,7 +5,7 @@ import example.grpc.SampleRequest;
 import example.grpc.SampleResponse;
 import io.grpc.stub.StreamObserver;
 
-public class Server extends SendServiceGrpc.SendServiceImplBase {
+public class SimpleServer extends SendServiceGrpc.SendServiceImplBase {
 
     private int count = 0;
 

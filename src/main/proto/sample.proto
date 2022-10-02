@@ -8,6 +8,7 @@ package sample;
 
 service SendService {
     rpc Send(SampleRequest) returns (SampleResponse);
+    rpc Stream(stream SampleRequest) returns (SampleResponse);
 }
 
 message SampleRequest {

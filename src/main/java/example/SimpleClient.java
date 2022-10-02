@@ -6,7 +6,7 @@ import example.grpc.SendServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-public class Client {
+public class SimpleClient {
 
     private static int count = 0;
 

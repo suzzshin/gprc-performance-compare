@@ -10,13 +10,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         var server = ServerBuilder.forPort(PORT)
-                .addService(new Server())
+                .addService(new SimpleServer())
                 .build()
                 .start();
 
-        Client.send();
-        Client.send();
-        Client.send();
+        SimpleClient.send();
+        SimpleClient.send();
+        SimpleClient.send();
 
         //server.awaitTermination();
     }
