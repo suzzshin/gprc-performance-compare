@@ -11,14 +11,18 @@ public class SimpleClient {
     private static int count = 0;
 
     public static void send() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", Main.PORT)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", Main.PORT_SIMPLE)
                 .usePlaintext()
                 .build();
 
-        SampleRequest request = SampleRequest.newBuilder().setId(++count).build();
-        SampleResponse response = SendServiceGrpc.newBlockingStub(channel).send(request);
-
-        System.out.println(response.getMessage());
+        for (int i = 0; i < Main.LOOP_COUNT; i++) {
+            if (i % 10000 == 0) {
+                System.out.println("Sent message: " + i);
+            }
+            SampleRequest request = SampleRequest.newBuilder().setId(++count).build();
+            SampleResponse response = SendServiceGrpc.newBlockingStub(channel).send(request);
+            //System.out.println(response.getMessage());
+        }
     }
 
 }
