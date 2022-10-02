@@ -36,8 +36,13 @@ dependencies {
 
 idea {
     module {
-        //generatedSourceDirs.add(file("src/main/java/grpc"))
-        //sourceDirs.add(file("src/main/java/grpc"))
+        //generatedSourceDirs.add(file("src/main/java"))
+        //sourceDirs.add(file("src/main/java"))
+
+        generatedSourceDirs.add(file("$buildDir/generated/source/proto/main/grpc"))
+        generatedSourceDirs.add(file("$buildDir/generated/source/proto/main/java"))
+        sourceDirs.add(file("$buildDir/generated/source/proto/main/grpc"))
+        sourceDirs.add(file("$buildDir/generated/source/proto/main/java"))
     }
 }
 
@@ -51,24 +56,25 @@ protobuf {
         }
     }
 
-    generatedFilesBaseDir = "$projectDir/src/"
+    //generatedFilesBaseDir = "$projectDir/src"
 
     generateProtoTasks {
         all()*.plugins {
             grpc {}
         }
-//        ofSourceSet("main").forEach {
-//            it.doFirst {
-//                delete("$generatedFilesBaseDir/main/java/example/grpc")
-//            }
-//        }
     }
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 sourceSets {
     main {
         java {
             srcDirs 'src/main/java'
+            srcDirs "build/generated/source/proto/main/grpc"
+            srcDirs "build/generated/source/proto/main/java"
         }
         proto {
             srcDirs 'src/main/proto'
